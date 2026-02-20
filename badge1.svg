@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Shield -->
+  <path 
+    d="M32 2 L12 12 V32 C12 52 32 62 32 62 C32 62 52 52 52 32 V12 L32 2 Z" 
+    fill="white" 
+    stroke="black" 
+    stroke-width="2"
+  />
+  
+  <!-- Star -->
+  <polygon 
+    points="32,12 35,24 48,24 37,32 40,44 32,36 24,44 27,32 16,24 29,24" 
+    fill="yellow" 
+    stroke="orange" 
+    stroke-width="1"
+  />
+</svg>
