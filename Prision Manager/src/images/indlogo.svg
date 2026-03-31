@@ -1,0 +1,22 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 640 480"
+    className="w-6 h-4"
+  >
+    <rect width="640" height="160" fill="#ff9933" />      {/* Saffron */}
+    <rect y="160" width="640" height="160" fill="#ffffff" /> {/* White */}
+    <rect y="320" width="640" height="160" fill="#138808" /> {/* Green */}
+    <circle cx="320" cy="240" r="30" fill="#000080" />  {/* Ashoka Chakra */}
+    <g stroke="#000080" strokeWidth="2" transform="translate(320 240)">
+      {/* 24 spokes */}
+      {Array.from({ length: 24 }).map((_, i) => (
+        <line
+          key={i}
+          x1="0"
+          y1="0"
+          x2={Math.cos((i * 15 * Math.PI) / 180) * 30}
+          y2={Math.sin((i * 15 * Math.PI) / 180) * 30}
+        />
+      ))}
+    </g>
+  </svg>

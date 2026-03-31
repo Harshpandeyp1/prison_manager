@@ -1,0 +1,55 @@
+// api/ai.js
+const fetch = require("node-fetch");
+
+module.exports = async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).send("Method Not Allowed");
+
+  const { prompt } = req.body;
+  const apiKey = process.env.VITE_AI_API_KEY;
+
+  const model = "gemini-2.5-flash-preview-09-2025";
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  const payload = {
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { temperature: 0.7, maxOutputTokens: 800 },
+  };
+
+  // Optional: exponential backoff for free-tier limits
+  const fetchWithRetry = async (retries = 5, delay = 1000) => {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.status === 429 && retries > 0) {
+        await new Promise((r) => setTimeout(r, delay));
+        return fetchWithRetry(retries - 1, delay * 2);
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`API Error ${response.status}: ${errorText}`);
+      }
+
+      const data = await response.json();
+      return data?.candidates?.[0]?.content?.[0]?.text || "No valid response generated.";
+    } catch (err) {
+      if (retries > 0) {
+        await new Promise((r) => setTimeout(r, delay));
+        return fetchWithRetry(retries - 1, delay * 2);
+      }
+      throw err;
+    }
+  };
+
+  try {
+    const result = await fetchWithRetry();
+    res.status(200).json({ candidates: [{ content: [{ text: result }] }] });
+  } catch (err) {
+    console.error("Gemini API Ultimate Failure:", err);
+    res.status(500).send("The AI node is currently busy. Please try again later.");
+  }
+};
