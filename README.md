@@ -31,7 +31,7 @@ A **Prison Management System** built to efficiently manage prisoner records, sta
 
 ## 📸 Screenshots
 
-![App Screenshot](./public/prison-dashboard.png)
+![Prison Manager Dashboard](./public/Screenshot%202026-04-06%20193339.png)
 
 > *(Replace with your actual screenshot path if different)*
 
